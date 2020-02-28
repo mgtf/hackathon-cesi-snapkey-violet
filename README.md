@@ -1,2 +1,2 @@
 # Hackathon CESI x SNAPKEY
-## Équipe verte
+## Équipe violette

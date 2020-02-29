@@ -2,11 +2,11 @@ var osmosis = require('osmosis');
 const fs = require('fs');
 
 var result;
-var test = 'test';
+var txt = './content.json';
 var res;
 
 
-function getSurfaceContent() {
+function getSurfacePriceContent() {
  // Return a promise as execution of request is time-dependent
  return new Promise((resolve, reject) => {
    let response = [];
@@ -32,7 +32,7 @@ function getSurfaceContent() {
  });
 }
 
-getSurfaceContent().then(res => {
+getSurfacePriceContent().then(res => {
   var surface, loyer, msquare_an;
   res.pop();
 
@@ -49,15 +49,20 @@ getSurfaceContent().then(res => {
   });
 
   msquare_an = loyer*12/surface;
+  console.log(res);
   console.log(msquare_an);
   result = res;
 
-  let donnees = JSON.stringify(res);
-  fs.writeFile('test.json', donnees, function(erreur) {
-    if (erreur) {
-      console.log(erreur);
-    }
-  })
 
+  // fs.writeFile('test.json', data, function(erreur) {
+  //   if (erreur) {
+  //     console.log(erreur);
+  //   }
+  // })
 
+  var data = JSON.parse(txt);
+  data.push(res)
+  txt = JSON.stringify(data);
+
+  console.log(res, data, txt);
 });

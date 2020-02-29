@@ -6,17 +6,16 @@ function getSurfaceContent() {
    let response = [];
 
    osmosis
-     // Tell Osmosis to load steemit.com
+     // Tell Osmosis to load pointdevente.fr
      .get('https://www.pointdevente.fr/fr/cession-de-bail-et-fonds-de-commerce/paris/halles-beaubourg/p_51267')
-     // We want to get the metatags in head, so provide the head element as a value to find
      .find('.block-info')
+
      // Set creates our final object of data we will get calling .data
      // the secondary values for these are select lookups. We are saying find meta tag with this property and return its content
      .set({
          element: '.label-info',
          value: '.content-info'
      })
-
 
        // Store a copy of the above object in our response variable
        .data(res => response.push(res))

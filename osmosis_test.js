@@ -1,4 +1,6 @@
 var osmosis = require('osmosis');
+var result;
+var test = 'test';
 
 function getSurfaceContent() {
  // Return a promise as execution of request is time-dependent
@@ -14,8 +16,8 @@ function getSurfaceContent() {
      // Set creates our final object of data we will get calling .data
      // the secondary values for these are select lookups. We are saying find meta tag with this property and return its content
      .set({
-         element: '.label-info',
-         value: '.content-info'
+         label: '.label-info',
+         valeur: '.content-info'
      })
      // Store a copy of the above object in our response variable
      .data(res => response.push(res))
@@ -27,16 +29,13 @@ function getSurfaceContent() {
 }
 
 getSurfaceContent().then(res => {
-  var tmp_elem, tmp_value;
-  let out = [];
-
   res.pop();
-  res.forEach((item, i) => {
-    tmp_elem = item.element;
-    tmp_value = item.value;
+  result = res;
 
-    out[tmp_elem] = tmp_value;
-  });
-
-  console.log(out);
+  module.exports =  {
+    result,
+    res,
+    test
+  };
+  
 });

@@ -7,7 +7,7 @@ function getSurfaceContent() {
 
    osmosis
      // Tell Osmosis to load steemit.com
-     .get('https://www.pointdevente.fr/fr/cession-de-bail-et-fonds-de-commerce/paris/rivoli/p_52233')
+     .get('https://www.pointdevente.fr/fr/cession-de-bail-et-fonds-de-commerce/paris/halles-beaubourg/p_51267')
      // We want to get the metatags in head, so provide the head element as a value to find
      .find('.block-info')
      // Set creates our final object of data we will get calling .data
@@ -24,7 +24,6 @@ function getSurfaceContent() {
        .error(err => reject(err))
        // Resolve the promise with our response object
        .done(() => resolve(response));
-
  });
 }
 

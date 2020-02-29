@@ -1,0 +1,25 @@
+{
+  "name": "hackathon-cesi-snapkey-violet",
+  "version": "1.0.0",
+  "description": "",
+  "main": "osmosis_test.js",
+  "dependencies": {
+    "daemon": "^1.1.0",
+    "osmosis": "^1.1.10",
+    "node": "^13.8.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mgtf/hackathon-cesi-snapkey-violet.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mgtf/hackathon-cesi-snapkey-violet/issues"
+  },
+  "homepage": "https://github.com/mgtf/hackathon-cesi-snapkey-violet#readme"
+}

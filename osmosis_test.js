@@ -1,33 +1,63 @@
 var osmosis = require('osmosis');
+const fs = require('fs');
+
+var result;
+var test = 'test';
+var res;
+
 
 function getSurfaceContent() {
  // Return a promise as execution of request is time-dependent
  return new Promise((resolve, reject) => {
    let response = [];
 
+
    osmosis
-     // Tell Osmosis to load steemit.com
-     .get('https://www.pointdevente.fr/fr/cession-de-bail-et-fonds-de-commerce/paris/halles-beaubourg/p_51267')
-     // We want to get the metatags in head, so provide the head element as a value to find
+     // Tell Osmosis to load pointdevente.fr
+     .get('https://www.pointdevente.fr/fr/cession-de-bail-et-fonds-de-commerce/paris/rivoli/p_47109')
      .find('.block-info')
+
      // Set creates our final object of data we will get calling .data
      // the secondary values for these are select lookups. We are saying find meta tag with this property and return its content
      .set({
-         element: '.label-info',
-         value: '.content-info'
+         label: '.label-info',
+         valeur: '.content-info'
      })
-
-
-       // Store a copy of the above object in our response variable
-       .data(res => response.push(res))
-       // If we encounter an error we will reject the promise
-       .error(err => reject(err))
-       // Resolve the promise with our response object
-       .done(() => resolve(response));
+     // Store a copy of the above object in our response variable
+     .data(res => response.push(res))
+     // If we encounter an error we will reject the promise
+     .error(err => reject(err))
+     // Resolve the promise with our response object
+     .done(() => resolve(response));
  });
 }
 
 getSurfaceContent().then(res => {
+  var surface, loyer, msquare_an;
   res.pop();
-  console.log(res);
+
+  res.forEach((item, i) => {
+    if (item.label === 'Totale') {
+      surface = parseInt(item.valeur);
+    }
+
+    if (item.label.indexOf('Loyer') == 0) {
+      item.valeur = item.valeur.replace(" ", "");
+      loyer = parseInt(item.valeur);
+    }
+
+  });
+
+  msquare_an = loyer*12/surface;
+  console.log(msquare_an);
+  result = res;
+
+  let donnees = JSON.stringify(res);
+  fs.writeFile('test.json', donnees, function(erreur) {
+    if (erreur) {
+      console.log(erreur);
+    }
+  })
+
+
 });

@@ -1,6 +1,10 @@
 var osmosis = require('osmosis');
+const fs = require('fs');
+
 var result;
 var test = 'test';
+var res;
+
 
 function getSurfaceContent() {
  // Return a promise as execution of request is time-dependent
@@ -10,7 +14,7 @@ function getSurfaceContent() {
 
    osmosis
      // Tell Osmosis to load pointdevente.fr
-     .get('https://www.pointdevente.fr/fr/cession-de-bail-et-fonds-de-commerce/paris/halles-beaubourg/p_51267')
+     .get('https://www.pointdevente.fr/fr/cession-de-bail-et-fonds-de-commerce/paris/rivoli/p_47109')
      .find('.block-info')
 
      // Set creates our final object of data we will get calling .data
@@ -29,16 +33,31 @@ function getSurfaceContent() {
 }
 
 getSurfaceContent().then(res => {
+  var surface, loyer, msquare_an;
   res.pop();
+
+  res.forEach((item, i) => {
+    if (item.label === 'Totale') {
+      surface = parseInt(item.valeur);
+    }
+
+    if (item.label.indexOf('Loyer') == 0) {
+      item.valeur = item.valeur.replace(" ", "");
+      loyer = parseInt(item.valeur);
+    }
+
+  });
+
+  msquare_an = loyer*12/surface;
+  console.log(msquare_an);
   result = res;
 
-  module.exports =  {
-    result,
-    res,
-    test
-  };
+  let donnees = JSON.stringify(res);
+  fs.writeFile('test.json', donnees, function(erreur) {
+    if (erreur) {
+      console.log(erreur);
+    }
+  })
 
-  exports.result;
-  exports.res;
 
 });

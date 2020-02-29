@@ -37,5 +37,8 @@ getSurfaceContent().then(res => {
     res,
     test
   };
-  
+
+  exports.result;
+  exports.res;
+
 });

@@ -1,6 +1,4 @@
-// author : Kvntn
-// license : MIT
-// git : http://github.io/Kvntn
+
 
 var osmosis = require('osmosis');
 const fs = require('fs');
@@ -37,34 +35,9 @@ function getSurfacePriceContent() {
      // Resolve the promise with our response object
      .done(() => resolve(response));
  });
-}
 
-function getArea() {
- // Return a promise as execution of request is time-dependent
-  return new Promise((resolve, reject) => {
-   osmosis
-     .find('.block-info')
-     .set({
-         code_postal: '75001'
-     })
 
-     .data(res => response.push(res))
-     .error(err => reject(err))
-     .done(() => resolve(response));
- });
-}
 
-function json_to_csv(data) {
-  return new Promise((resolve, reject) =>{
-      process.stdout.on("data", data =>{
-          resolve(data.toString()); // <------------ by default converts to utf-8
-      })
-      process.stderr.on("data", reject)
-  })
-  .catch((err) => {
-      console.log("error here: " + err)
-  });
-}
 
 getSurfacePriceContent().then(res => {
   return new Promise((resolve, reject) => {
@@ -73,9 +46,8 @@ getSurfacePriceContent().then(res => {
     res.pop();
 
     res.forEach((item, i) => {
-      if (item.label === 'Totale') {
+      if (item.label === 'Totale')
         surface = parseInt(item.valeur);
-      }
 
       if (item.label.indexOf('Loyer') == 0) {
         item.valeur = item.valeur.replace(" ", "");

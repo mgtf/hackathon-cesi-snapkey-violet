@@ -1,10 +1,17 @@
-var osmosis = require('osmosis');
-const fs = require('fs');
+// author : Antoine Casenove @SNAPKEY, Kvntn
 
-var result;
-var jsonData = [];
+const fs           = require('fs');              // file manager
+var osmosis        = require('osmosis');         // lib used from web scrapping
+var json2csv       = require('./csv_gen.js');    // file using functions to convert json to csv files
+var stringify      = require('csv-stringify');   // lib used to convert json to csv directly
 
-function getSurfaceContent() {
+const jsonDocument = "./test.json";              // not used
+const csvDocument  = "./pointdevente.csv";       // output in csv
+
+var jsonData = [];     // stocks harvested data
+
+//function used to harvest data
+function harvestPageContent() {
     // Return a promise as execution of request is time-dependent
     return new Promise((resolve, reject) => {
         let response = [];
@@ -32,8 +39,28 @@ function getSurfaceContent() {
     });
 }
 
-getSurfaceContent().then(res => {
+// function used to append harvested data into a CSV file
+function dataToCSV(jsonData) {
+  return new Promise((resolve, reject) =>{
 
+    stringify(jsonData, (err, output) => {
+      fs.appendFileSync(csvDocument, output, 'utf-8', (err) => {
+        if (err) {
+          console.log('Some error occured - file either not saved or corrupted file saved.');
+        } else {
+          console.log('No error');
+        }
+      });
+    });
+  })
+  .catch((err) => {
+      console.log("------ Error ------ \n\n" + err)
+  });
+}
+
+// end of function definition
+
+harvestPageContent().then(res => {
     res.forEach((item, i) => {
         jsonData.push(        {
             "index" : "",
@@ -62,7 +89,7 @@ getSurfaceContent().then(res => {
             jsonData[i].prix_m2_an = (parseInt(price[0].trim().replace(" ", "")) / 12).toFixed(2) + " € / m² / an";
         }
 
-        if(item.discrictTitle != null)
+        if (item.discrictTitle != null)
             jsonData[i].quartier = item.discrictTitle;
         else
             jsonData[i].quartier = "Non renseigné";
@@ -71,15 +98,14 @@ getSurfaceContent().then(res => {
         jsonData[i].index = i;
     });
 
-    console.log(jsonData);
-    result = res;
+    dataToCSV(jsonData);
 
-    let donnees = JSON.stringify(jsonData);
-    fs.writeFile('test.json', donnees, function(erreur) {
-        if (erreur) {
-            console.log(erreur);
-        }
-    })
+    //----------- code used to append data on a JSON file ------------//
 
+    // let donnees = JSON.stringify(jsonData);
+    // fs.appendFileSync(jsonDocument, donnees, (erreur) => {
+    //   if (erreur) throw erreur;
+    // })
 
+    //-----------------------------------------------------------------//
 });
